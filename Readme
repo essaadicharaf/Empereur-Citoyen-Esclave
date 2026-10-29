@@ -1,9 +1,0 @@
-[المستخدم يكتب/يكليكي]
-         ↓
-    src/main.js      <-- كيتصنت للكليك والكتابة (Event Listeners)
-         ↓
-   src/players.js    <-- كيفحص الشروط بالـ Regex والتكرار (Pure Logic)
-         ↓
-   src/storage.js    <-- كيحفظ ويقرا من الذاكرة (LocalStorage)
-         ↓
-     src/ui.js       <-- كيرسم النتيجة فـ الشاشة (DOM Manipulation)

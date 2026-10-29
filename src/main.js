@@ -1,24 +1,37 @@
-const playerForm =document.getElementById("player-form");
-const inputName =document.getElementById("nickname-input");
-const nicknameError =document.getElementById("nickname-error");
-// const selectedAvatar = document.querySelector('input[name="avatar"]:checked')?.value || "👑";
-const selectedAvatar = playerForm.elements["avatar"].value;
-const btnSubmit =document.querySelector('button[type="submit"]');
+import {
+  activePlayerId,
+  deletePlayer,
+  formValidation,
+  playerForm,
+  playerList,
+  selectPlayer,
+  updatePlayer,
+} from "./players.js";
+import { displayPlayers } from "./ui.js";
 
-//-----
-// {
-//   id: "p_1730112000000",          // identifiant unique (par ex. avec Date.now())
-//   nickname: "Yanis_07",           // pseudo
-//   avatar: "dragon",               // un avatar choisi dans une liste
-//   createdAt: "2026-10-28"         // date de création
-// }
+const playersContainer = document.getElementById("players-list-container");
 
-// playerForm.addEventListener("click", function (e) {
-//   console.log(selectedAvatar); 
-//   console.log(selectedAvatar); 
+if (playersContainer) {
+  playersContainer.addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-action]");
+    if (!btn) return;
+    const action = btn.getAttribute("data-action");
+    const id = btn.getAttribute("data-id");
+    if (action === "select") {
+      selectPlayer(id);
+    } else if (action === "delete") {
+      deletePlayer(id);
+    } else if (action === "edit") {
+      updatePlayer(id);
+    }
+  });
+}
 
-// e.preventDefault()
-// });
-  console.log(selectedAvatar); 
+if (playerForm) {
+  playerForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    formValidation();
+  });
+}
 
-
+displayPlayers(playerList, activePlayerId);
