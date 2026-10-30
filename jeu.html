@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="fr" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E•C•S — Duel (Jeu)</title>
+    <link rel="stylesheet" href="dist/output.css" />
+  </head>
+  <body class="bg-slate-900/80 text-slate-100 min-h-screen font-sans flex flex-col justify-between">
+    <header class="sticky top-0 z-50 bg-sky-950 backdrop-blur border-b border-slate-800">
+      <div class="max-w-5xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
+        <div class="flex items-center gap-3">
+          <a
+            href="index.html"
+            class="flex items-center gap-3 group transition-transform active:scale-95"
+            aria-label="Accueil E-C-S"
+          >
+            <div
+              class="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-xl shadow-md group-hover:border-amber-500/50 transition-colors"
+            >
+              <span class="relative">
+                👑
+                <span class="absolute -bottom-1 -right-1 text-[10px]">⛓️</span>
+              </span>
+            </div>
+            <div class="flex flex-col">
+              <div class="flex items-center gap-1.5 font-black text-sm tracking-widest text-amber-400">
+                <span>E</span>
+                <span class="text-slate-600">•</span>
+                <span>C</span>
+                <span class="text-slate-600">•</span>
+                <span class="text-rose-500">S</span>
+              </div>
+              <span class="text-[9px] font-bold tracking-wider text-slate-400 uppercase">
+                Empereur • Citoyen • Esclave
+              </span>
+            </div>
+          </a>
+        </div>
+        <nav aria-label="Navigation principale">
+          <ul class="flex items-center gap-2 bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs font-semibold">
+            <li>
+              <a href="index.html" class="px-3.5 py-1.5 rounded-lg text-slate-300 hover:text-white block transition">
+                Profils
+              </a>
+            </li>
+            <li>
+              <a
+                href="jeu.html"
+                class="px-3.5 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold block transition"
+              >
+                Duel (Jeu)
+              </a>
+            </li>
+            <li>
+              <a
+                href="historique.html"
+                class="px-3.5 py-1.5 rounded-lg text-slate-300 hover:text-white block transition"
+              >
+                Historique
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <div id="active-player-slot"></div>
+      </div>
+    </header>
+    <main class="max-w-6xl mx-auto px-4 py-2 flex-1 w-full flex flex-col gap-5">
+      <section
+        class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-lg"
+      >
+        <div class="flex items-center gap-4">
+          <div class="bg-slate-950 border border-slate-800 py-2.5 px-3.5 rounded-xl flex items-center gap-2">
+            <span class="text-xs text-slate-400 uppercase tracking-wider font-bold">Manche</span>
+            <span class="text-sm font-black text-amber-400 font-mono"> <span id="current-round">1</span> / 12 </span>
+          </div>
+          <div class="bg-slate-950 border border-slate-800 px-3.5 py-2.5 rounded-xl flex items-center gap-2">
+            <span class="text-xs text-slate-400 uppercase tracking-wider font-bold">Série</span>
+            <span class="text-sm font-black text-white font-mono"> <span id="current-set">1</span> / 4 </span>
+          </div>
+        </div>
+        <div class="flex items-center gap-6">
+          <div class="flex items-center gap-2 text-right">
+            <div>
+              <p id="player-hud-name" class="text-xs font-bold text-white truncate max-w-30">Joueur</p>
+              <p id="player-role-badge" class="text-[10px] text-amber-400 uppercase font-semibold">Camp Empereur</p>
+            </div>
+            <span
+              id="player-score"
+              class="text-2xl font-black text-amber-400 bg-slate-950 border border-slate-800 px-3 py-1 rounded-xl font-mono"
+            >
+              0
+            </span>
+          </div>
+          <span class="text-slate-600 font-black text-lg">:</span>
+          <div class="flex items-center gap-2 text-left">
+            <span
+              id="computer-score"
+              class="text-2xl font-black text-slate-300 bg-slate-950 border border-slate-800 px-3 py-1 rounded-xl font-mono"
+            >
+              0
+            </span>
+            <div>
+              <p class="text-xs font-bold text-slate-300">Ordinateur</p>
+              <p id="computer-role-badge" class="text-[10px] text-rose-400 uppercase font-semibold">Camp Esclave</p>
+            </div>
+          </div>
+        </div>
+        <button
+          type="button"
+          id="btn-abandon"
+          class="px-3.5 py-2 rounded-xl text-xs font-bold text-rose-400 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 transition"
+        >
+          Abandonner
+        </button>
+      </section>
+      <!--  -->
+      <section class=""></section>
+    </main>
+  </body>
+</html>
