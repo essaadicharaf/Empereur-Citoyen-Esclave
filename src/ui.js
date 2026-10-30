@@ -47,11 +47,11 @@ export const displayPlayers = (playerList, activePlayerId) => {
           <button type="button" data-action="select" data-id="${player.id}" class="px-3 py-1 rounded-lg text-xs font-bold transition ${isSelected ? "bg-amber-500 text-slate-950" : "bg-slate-800 text-slate-300 hover:text-white"}">
             ${isSelected ? "Actif" : "Choisir"}
           </button>
-          <button type="button" data-action="delete" data-id="${player.id}" class="p-1.5 text-slate-400 hover:text-rose-400" title="Supprimer">
-            🗑️
+          <button type="button" data-action="delete" data-id="${player.id}" class=" px-3 py-2 rounded-lg text-xs font-bold transition bg-slate-800   text-slate-400 hover:text-rose-400" title="Supprimer">
+            Supprimer 🗑️
           </button>
-          <button type="button" data-action="edit" data-id="${player.id}" class="p-1.5 text-slate-400 hover:text-rose-400" title="Modifier">
-            ✏️
+          <button type="button" data-action="edit" data-id="${player.id}" class="px-3 py-2 rounded-lg text-xs font-bold transition bg-slate-800   text-slate-400 hover:text-" title="Modifier">
+            Modifier ✏️
           </button>
         </div>
       </div>
