@@ -29,7 +29,7 @@ export const displayPlayers = (playerList, activePlayerId) => {
     playersContainer.innerHTML += `
       <div class="p-3.5 border rounded-xl flex items-center justify-between transition ${isSelected ? "border-amber-500 bg-amber-500/10" : "border-slate-800 bg-slate-900/60"}">
         <div class="flex items-center gap-3">
-          <span class="w-10 h-10 aspect-square flex items-center justify-center rounded-xl bg-slate-950 border border-slate-800 text-xl">
+          <span class="w-15 h-15 aspect-square flex items-center justify-center rounded-xl bg-slate-950 border-2 border-slate-600 text-xl">
             ${player.avatar}
           </span>
           <div>
@@ -44,14 +44,14 @@ export const displayPlayers = (playerList, activePlayerId) => {
           </div>
         </div>
         <div class="flex items-center gap-2">
-          <button type="button" data-action="select" data-id="${player.id}" class="px-3 py-1 rounded-lg text-xs font-bold transition ${isSelected ? "bg-amber-500 text-slate-950" : "bg-slate-800 text-slate-300 hover:text-white"}">
+          <button type="button" data-action="select" data-id="${player.id}" class="px-3.5 py-2 rounded-lg text-xs font-bold transition ${isSelected ? "bg-amber-500 text-slate-950" : "bg-slate-800 text-slate-300 hover:text-white hover:border-2 hover:bg-slate-950 "}">
             ${isSelected ? "Actif" : "Choisir"}
           </button>
-          <button type="button" data-action="delete" data-id="${player.id}" class=" px-3 py-2 rounded-lg text-xs font-bold transition bg-slate-800   text-slate-400 hover:text-rose-400" title="Supprimer">
-            Supprimer 🗑️
+          <button type="button" data-action="delete" data-id="${player.id}" class=" px-3 py-2 rounded-lg text-xs font-bold transition bg-slate-800   text-slate-400 hover:text-red-500 hover:border-2 hover:border-red-500 hover:bg-red-300 title="Supprimer">
+          🗑️ Supprimer
           </button>
-          <button type="button" data-action="edit" data-id="${player.id}" class="px-3 py-2 rounded-lg text-xs font-bold transition bg-slate-800   text-slate-400 hover:text-" title="Modifier">
-            Modifier ✏️
+          <button type="button" data-action="edit" data-id="${player.id}" class="px-3 py-2 rounded-lg text-xs font-bold transition bg-slate-800   text-slate-400 hover:text-orange-400 hover:border-2 hover:border-orange-400 hover:bg-orange-100" title="Modifier">
+            ✏️ Modifier
           </button>
         </div>
       </div>
