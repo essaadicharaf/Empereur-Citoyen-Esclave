@@ -59,3 +59,4 @@ export const displayPlayers = (playerList, activePlayerId) => {
   });
   updateActivePlayerHeader(playerList, activePlayerId);
 };
+
