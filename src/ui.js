@@ -1,3 +1,4 @@
+import { activePlayerId, playerList } from "./players.js";
 const playersContainer = document.getElementById("players-list-container");
 const activePlayerSlot = document.getElementById("active-player-slot");
 export const updateActivePlayerHeader = (playerList, activePlayerId) => {
@@ -18,6 +19,7 @@ export const updateActivePlayerHeader = (playerList, activePlayerId) => {
   `;
 };
 export const displayPlayers = (playerList, activePlayerId) => {
+  if (!playersContainer) return;
   playersContainer.innerHTML = "";
   if (playerList.length === 0) {
     playersContainer.innerHTML = `<p class="text-xs text-slate-500">Aucun profil enregistré pour le moment.</p>`;
@@ -59,4 +61,74 @@ export const displayPlayers = (playerList, activePlayerId) => {
   });
   updateActivePlayerHeader(playerList, activePlayerId);
 };
+// add name Player Heads-Up Display
+export const namePlayer = () => {
+  const playerName = document.getElementById("player-hud-name");
+  if (!playerName) return;
 
+  const player = playerList.find((p) => p.id === activePlayerId);
+  if (!player) {
+    playerName.textContent = "Joueur inconnu";
+    return;
+  }
+
+  playerName.textContent = `${player.avatar} ${player.nickname}`;
+};
+
+// check player active
+export const checkPlayerActive = () => {
+  const missing = document.getElementById("missing-player-modal");
+  if (!missing) return;
+
+  if (!activePlayerId) {
+    missing.classList.remove("hidden");
+    missing.classList.add("flex");
+  } else {
+    missing.classList.add("hidden");
+    missing.classList.remove("flex");
+  }
+};
+export const renderPlayerHand = (cards) => {
+  const playerHandElement = document.getElementById("player-hand");
+  if (!playerHandElement) return;
+
+  playerHandElement.innerHTML = "";
+
+  cards.forEach((card) => {
+    const cardHTML = `
+      <div
+        data-id="${card.id}"
+        class="w-20 h-32 sm:w-24 sm:h-36 rounded-xl border border-slate-700/60 bg-slate-900 shadow-xl flex flex-col items-center justify-between p-2 cursor-pointer select-none"
+      >
+        <span class="text-[10px] font-mono text-slate-500">ECS</span>
+        <img src="${card.image}" alt="${card.name}" class="w-14 h-20 object-cover rounded pointer-events-none" />
+        <span class="text-[10px] font-bold text-slate-200 uppercase">${card.name}</span>
+      </div>
+    `;
+    playerHandElement.innerHTML += cardHTML;
+  });
+};
+//  render Computer Hand
+export const renderComputerHand = (cards) => {
+  const computerHandElement = document.getElementById("computer-hand");
+  const computerCardCount = document.getElementById("computer-card-count");
+  if (!computerHandElement) return;
+  computerHandElement.innerHTML = "";
+  if (computerCardCount) {
+    computerCardCount.textContent = `${cards.length} cartes`;
+  }
+  cards.forEach((card) => {
+    const cardHTML = `
+      <div
+        data-id="${card.id}"
+        class="w-20 h-32 sm:w-24 sm:h-36 rounded-xl border border-slate-700/60 bg-linear-to-br from-slate-900 to-slate-950 shadow-md flex flex-col items-center justify-between p-1.5 select-none transition-all"
+      >
+        <span class="text-[9px] font-mono font-bold self-start text-slate-600">ECS</span>
+        <span class="text-xl sm:text-2xl text-slate-500">🎴</span>
+        <span class="text-[8px] font-bold tracking-widest text-slate-600 uppercase">Secret</span>
+      </div>
+    `;
+
+    computerHandElement.innerHTML += cardHTML;
+  });
+};

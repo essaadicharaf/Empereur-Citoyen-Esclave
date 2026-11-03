@@ -1,6 +1,7 @@
 import { getStoredActivePlayer, getStoredPlayers, saveActivePlayerId, saveToLocaleStorage } from "./storage.js";
 import { displayPlayers } from "./ui.js";
 export const playerForm = document.getElementById("player-form");
+export const main = document.querySelector("main");
 export const inputName = document.getElementById("nickname-input");
 export const nicknameError = document.getElementById("nickname-error");
 export const btnSubmit = document.querySelector('button[type="submit"]');
