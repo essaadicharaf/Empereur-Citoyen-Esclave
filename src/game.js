@@ -3,33 +3,25 @@ export const card = {
   CITOYEN: "CITOYEN",
   ESCLAVE: "ESCLAVE",
 };
-
 export const generateHand = (role) => {
   const specialCard =
     role === card.EMPEREUR
       ? { id: `c_${Date.now()}_special`, type: card.EMPEREUR, name: "Empereur", image: "images/emperor.jpg" }
       : { id: `c_${Date.now()}_special`, type: card.ESCLAVE, name: "Esclave", image: "images/slave.jpg" };
-
   const citizens = [1, 2, 3, 4].map((num) => ({
     id: `c_${Date.now()}_citoyen_${num}`,
     type: card.CITOYEN,
     name: "Citoyen",
     image: "images/citizen.jpg",
   }));
-
   return [specialCard, ...citizens];
 };
-
-
 export const getComputerChoice = (hand) => {
   if (!hand || hand.length === 0) return null;
   const randomIndex = Math.floor(Math.random() * hand.length);
   return hand[randomIndex];
 };
-
-
 export const duel = (playerCardType, computerCardType) => {
-  // 1. التعادل (مواطن ضد مواطن)
   if (playerCardType === computerCardType) {
     return {
       winner: "NUL",
@@ -38,7 +30,6 @@ export const duel = (playerCardType, computerCardType) => {
       message: "Égalité ! Les deux citoyens s'annulent.",
     };
   }
-
   if (playerCardType === card.EMPEREUR && computerCardType === card.CITOYEN) {
     return {
       winner: "PLAYER",
@@ -55,8 +46,6 @@ export const duel = (playerCardType, computerCardType) => {
       message: "Défaite ! L'Empereur adverse soumet votre Citoyen (+1 pt).",
     };
   }
-
-
   if (playerCardType === card.CITOYEN && computerCardType === card.ESCLAVE) {
     return {
       winner: "PLAYER",
@@ -73,7 +62,6 @@ export const duel = (playerCardType, computerCardType) => {
       message: "Défaite ! Le Citoyen adverse maîtrise votre Esclave (+1 pt).",
     };
   }
-
   if (playerCardType === card.ESCLAVE && computerCardType === card.EMPEREUR) {
     return {
       winner: "PLAYER",
