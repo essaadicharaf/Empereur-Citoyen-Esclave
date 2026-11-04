@@ -1,4 +1,4 @@
-import { card, generateHand, getComputerChoice, duel } from "./game.js";
+import { card, duel, generateHand, getComputerChoice } from "./game.js";
 import {
   activePlayerId,
   deletePlayer,
@@ -50,7 +50,9 @@ let playerScore = 0,
   computerRole = card.ESCLAVE,
   playerHand = [],
   computerHand = [],
-  isRoleLocked = false;
+  isRoleLocked = false,
+  roundCount = 1,
+  setCount = 1;
 const playerBattle = document.getElementById("player-battle-slot");
 const currentRound = document.getElementById("current-round");
 const currentSet = document.getElementById("current-set");
@@ -112,6 +114,74 @@ if (playerBattle) {
           btnNextRound.classList.remove("hidden");
         }
       }
+    });
+  }
+  const updateGameHUD = () => {
+    if (currentRound) currentRound.textContent = `${roundCount}/12`;
+    if (currentSet) currentSet.textContent = `${setCount}/4`;
+    const playerCampEl = document.getElementById("player-camp") || document.getElementById("player-role");
+    if (playerCampEl) {
+      playerCampEl.textContent = playerRole === card.EMPEREUR ? "Empereur 👑" : "Esclave ⛓️";
+    }
+    const firstPlayerEl = document.getElementById("first-player");
+    if (firstPlayerEl) {
+      firstPlayerEl.textContent = playerRole === card.EMPEREUR ? "Empereur" : "Esclave";
+    }
+    const playerScoreEl = document.getElementById("player-score");
+    const computerScoreEl = document.getElementById("computer-score");
+    if (playerScoreEl) playerScoreEl.textContent = playerScore;
+    if (computerScoreEl) computerScoreEl.textContent = computerScore;
+    console.log("player score :", playerScore, " computeur score :", computerScore);
+  };
+  updateGameHUD();
+  if (btnNextRound) {
+    btnNextRound.addEventListener("click", () => {
+      if (roundCount >= 12) {
+        isRoleLocked = true;
+        const finalWinner =
+          playerScore > computerScore
+            ? "Victoire finale !"
+            : playerScore < computerScore
+              ? "Défaite finale !"
+              : "Match Nul !";
+        if (feedbackEl) {
+          feedbackEl.textContent = `Partie terminée ! ${finalWinner} Score final :
+           ${playerScore} - ${computerScore}`;
+        }
+        return;
+      }
+      btnNextRound.classList.add("hidden");
+      isRoleLocked = false;
+      if (playerSlot && computerSlot) {
+        playerSlot.innerHTML = `<span class="text-xs text-slate-500 font-medium">À vous de jouer</span>`;
+        computerSlot.innerHTML = `
+          <span class="text-2xl text-slate-600">❓</span>
+          <span class="text-[10px] text-slate-500 uppercase mt-1">En attente</span>
+        `;
+      }
+      if (roundCount === 3 || roundCount === 6 || roundCount === 9) {
+        setCount++;
+        if (playerRole === card.EMPEREUR) {
+          playerRole = card.ESCLAVE;
+          computerRole = card.EMPEREUR;
+        } else {
+          playerRole = card.EMPEREUR;
+          computerRole = card.ESCLAVE;
+        }
+        if (feedbackEl) {
+          feedbackEl.textContent = `Nouveau Groupe (${setCount}/4) ! Rôles inversés : vous êtes ${playerRole}.`;
+        }
+      } else {
+        if (feedbackEl) {
+          feedbackEl.textContent = "Choisissez une carte pour débuter le duel.";
+        }
+      }
+      roundCount++;
+      updateGameHUD();
+      playerHand = generateHand(playerRole);
+      computerHand = generateHand(computerRole);
+      renderPlayerHand(playerHand);
+      renderComputerHand(computerHand);
     });
   }
 }
