@@ -71,25 +71,24 @@
         <div id="active-player-slot"></div>
       </div>
     </header>
-    <main class="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-5 px-4 py-6">
+    <main class="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 py-6">
       <section
         class="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-800 bg-slate-900/80 p-4 shadow-lg"
       >
         <div class="flex items-center gap-4">
           <div class="flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-1.5">
             <span class="text-xs font-bold tracking-wider text-slate-400 uppercase">Manche</span>
-            <span class="font-mono text-sm font-black text-amber-400"> <span id="current-round">1</span> / 12 </span>
+            <span class="font-mono text-sm font-black text-amber-400"> <span id="current-round"></span></span>
           </div>
           <div class="flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-1.5">
             <span class="text-xs font-bold tracking-wider text-slate-400 uppercase">Série</span>
-            <span class="font-mono text-sm font-black text-white"> <span id="current-set">1</span> / 4 </span>
+            <span class="font-mono text-sm font-black text-white"> <span id="current-set"></span></span>
           </div>
         </div>
         <div class="flex items-center gap-6">
           <div class="flex items-center gap-2 text-right">
             <div>
               <p id="player-hud-name" class="max-w-30 truncate text-xs font-bold text-white">Joueur</p>
-              <p id="player-role-badge" class="text-[10px] font-semibold text-amber-400 uppercase">Camp Empereur</p>
             </div>
             <span
               id="player-score"
@@ -108,7 +107,6 @@
             </span>
             <div>
               <p class="text-xs font-bold text-slate-300">Ordinateur</p>
-              <p id="computer-role-badge" class="text-[10px] font-semibold text-rose-400 uppercase">Camp Esclave</p>
             </div>
           </div>
         </div>
@@ -121,7 +119,7 @@
         </button>
       </section>
       <section
-        class="relative flex min-h-140 w-full flex-1 flex-col justify-between overflow-hidden rounded-3xl border-8 border-slate-900 bg-emerald-950 p-4 shadow-2xl sm:p-6"
+        class="relative flex min-h-140 w-full flex-1 flex-col justify-between overflow-hidden rounded-xl border-8 border-slate-900/80 bg-emerald-950 p-2 shadow-2xl sm:p-6"
       >
         <div
           class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-emerald-600/20 via-emerald-950/80 to-slate-950"
@@ -156,7 +154,7 @@
               >
                 <span class="text-xs font-black text-amber-400">VS</span>
               </div>
-              <p id="duel-feedback" class="min-h-5 max-w-xs text-center text-xs font-bold text-white sm:text-sm">
+              <p id="duel-feedback" class="min-h-5 max-w-2xl text-center text-xs font-bold text-white sm:text-sm">
                 À vous de jouer
               </p>
             </div>
