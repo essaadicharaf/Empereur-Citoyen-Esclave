@@ -184,8 +184,8 @@ if (playerBattle) {
     }
     if (feedbackEl) feedbackEl.textContent = "A vous de jouer";
     updateGameHUD();
-    playerHand.generateHand(playerRole);
-    computerHand.generateHand(computerRole);
+    playerHand = generateHand(playerRole);
+    computerHand = generateHand(computerRole);
     renderPlayerHand(playerHand);
     renderComputerHand(computerHand);
   };
@@ -197,11 +197,10 @@ if (playerBattle) {
 
   if (btnNextRound) {
     btnNextRound.addEventListener("click", () => {
-      btnNextRound.classList.add("hidden")
+      btnNextRound.classList.add("hidden");
       if (roundCount >= 12) {
         isRoleLocked = true;
         const isPlayerWinner = playerScore > computerScore;
-        showGameOverModel();
         const finalWinner =
           playerScore > computerScore
             ? "Victoire finale !"
@@ -209,6 +208,7 @@ if (playerBattle) {
               ? "Défaite finale !"
               : "Match Nul !";
         recordGameResult(isPlayerWinner);
+        showGameOverModel(isPlayerWinner);
         if (feedbackEl) {
           feedbackEl.textContent = `Partie terminée ! ${finalWinner} Score final :
            ${playerScore} - ${computerScore}`;
