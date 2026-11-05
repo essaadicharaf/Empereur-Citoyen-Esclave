@@ -40,7 +40,7 @@ export const displayPlayers = (playerList, activePlayerId) => {
               ${isSelected ? `<span class="text-[9px] bg-amber-500 text-black px-1.5 py-0.5 rounded font-black">ACTIF</span>` : ""}
             </div>
             <div class="flex  flex-col  items-start  gap-2">
-            <span class="text-[11px] block text-slate-500">Parties : 0 </span>
+            <span class="text-[11px] block text-slate-500">Parties : ${player.gamesPlayer}</span>
             <span class="text-[11px] block text-slate-500"> Créé le : ${player.createdAt}</span>
           </div>
           </div>
@@ -49,10 +49,10 @@ export const displayPlayers = (playerList, activePlayerId) => {
           <button type="button" data-action="select" data-id="${player.id}" class="px-3.5 py-2 rounded-lg text-xs font-bold transition ${isSelected ? "bg-amber-500 text-slate-950" : "bg-slate-800 text-slate-300 hover:text-white hover:border-2 hover:bg-slate-950 "}">
             ${isSelected ? "Actif" : "Choisir"}
           </button>
-          <button type="button" data-action="delete" data-id="${player.id}" class=" px-3 py-2 rounded-lg text-xs font-bold transition bg-slate-800   text-slate-400 hover:text-red-500 hover:border-2 hover:border-red-500 hover:bg-red-300 title="Supprimer">
+          <button type="button" data-action="delete" data-id="${player.id}" class=" px-3 py-2 rounded-lg text-xs font-bold transition bg-slate-800   text-slate-400 hover:text-red-700 hover:border-2 hover:border-red-700 hover:bg-red-300 title="Supprimer">
           🗑️ Supprimer
           </button>
-          <button type="button" data-action="edit" data-id="${player.id}" class="px-3 py-2 rounded-lg text-xs font-bold transition bg-slate-800   text-slate-400 hover:text-orange-400 hover:border-2 hover:border-orange-400 hover:bg-orange-100" title="Modifier">
+          <button type="button" data-action="edit" data-id="${player.id}" class="px-3 py-2 rounded-lg text-xs font-bold transition bg-slate-800   text-slate-400 hover:text-orange-600 hover:border-2 hover:border-orange-600 hover:bg-orange-100" title="Modifier">
             ✏️ Modifier
           </button>
         </div>
@@ -92,11 +92,11 @@ export const renderPlayerHand = (cards) => {
     const cardHTML = `
       <div
         data-id="${card.id}"
-        class="w-20 h-32 sm:w-24 sm:h-36 rounded-xl border border-slate-700/60 bg-slate-900 shadow-xl flex flex-col items-center justify-between p-2 cursor-pointer select-none"
+        class="w-20 h-32 sm:w-24 sm:h-36 rounded-xl border border-slate-700/60 bg-slate-900 shadow-xl flex flex-col items-center justify-between p-1 cursor-pointer select-none"
       >
-        <span class="text-[10px] font-mono text-slate-500">ECS</span>
-        <img src="${card.image}" alt="${card.name}" class="w-14 h-20 object-cover rounded pointer-events-none" />
         <span class="text-[10px] font-bold text-slate-200 uppercase">${card.name}</span>
+        <img src="${card.image}" alt="${card.name}" class="w-20 h-28 object-cover rounded pointer-events-none" />
+
       </div>
     `;
     playerHandElement.innerHTML += cardHTML;

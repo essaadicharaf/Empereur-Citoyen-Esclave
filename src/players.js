@@ -69,6 +69,8 @@ export let formValidation = () => {
       nickname: `${nicknameValue}`,
       avatar: selectedAvatar,
       createdAt: new Date().toISOString().split("T")[0],
+      gamesPlayer: 0,
+      gamesWin: 0,
     };
     playerList.push(newPlayer);
     saveToLocaleStorage(playerList);
@@ -79,4 +81,15 @@ export let formValidation = () => {
     }
   }
   inputName.value = "";
+};
+export const recordGameResult = (isWinner) => {
+  const player = playerList.find((p) => p.id === activePlayerId);
+  if (!player) return;
+  if (!player.gamesPlayer) player.gamesPlayer = 0;
+  if (!player.gamesWin) player.gamesWin = 0;
+  player.gamesPlayer++;
+  if (isWinner) {
+    player.gamesWin++;
+  }
+  saveToLocaleStorage(playerList);
 };
