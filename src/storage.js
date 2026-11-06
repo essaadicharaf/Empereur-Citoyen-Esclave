@@ -14,3 +14,11 @@ export const saveActivePlayerId = (id) => {
     localStorage.removeItem("ece_active_player");
   }
 };
+export const getStoreHistory = () => {
+  return JSON.parse(localStorage.getItem("ece_history")) || [];
+};
+export const saveMatchToHistory = (matchData) => {
+  const history = getStoreHistory();
+  history.unshift(matchData);
+  localStorage.setItem("ece_history", JSON.stringify(history));
+};
