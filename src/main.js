@@ -9,18 +9,17 @@ import {
   selectPlayer,
   updatePlayer,
 } from "./players.js";
-import { saveMatchToHistory } from "./storage.js";
+import { clearStoreHistory, getStoreHistory, saveMatchToHistory } from "./storage.js";
 import {
   checkPlayerActive,
+  displayHistory,
   displayPlayers,
   namePlayer,
   renderComputerHand,
   renderPlayerHand,
   updateActivePlayerHeader,
 } from "./ui.js";
-
 const playersContainer = document.getElementById("players-list-container");
-
 if (playersContainer) {
   playersContainer.addEventListener("click", (e) => {
     const btn = e.target.closest("button[data-action]");
@@ -36,7 +35,6 @@ if (playersContainer) {
     }
   });
 }
-
 // validation ajout et modif
 if (playerForm) {
   playerForm.addEventListener("submit", (e) => {
@@ -44,12 +42,10 @@ if (playerForm) {
     formValidation();
   });
 }
-
 updateActivePlayerHeader(playerList, activePlayerId);
 if (playersContainer) {
   displayPlayers(playerList, activePlayerId);
 }
-
 // Game State
 let playerScore = 0,
   computerScore = 0,
@@ -60,11 +56,9 @@ let playerScore = 0,
   isRoleLocked = false,
   roundCount = 1,
   setCount = 1;
-
 const playerBattle = document.getElementById("player-battle-slot");
 const currentRound = document.getElementById("current-round");
 const currentSet = document.getElementById("current-set");
-
 if (playerBattle) {
   const playerHandElement = document.getElementById("player-hand");
   const playerSlot = document.getElementById("player-battle-slot");
@@ -73,27 +67,21 @@ if (playerBattle) {
   const playerScoreEl = document.getElementById("player-score");
   const computerScoreEl = document.getElementById("computer-score");
   const btnNextRound = document.getElementById("btn-next-round");
-
   checkPlayerActive();
   namePlayer();
-
   playerHand = generateHand(playerRole);
   computerHand = generateHand(computerRole);
   renderPlayerHand(playerHand);
   renderComputerHand(computerHand);
-
   if (playerHandElement) {
     playerHandElement.classList.add("hover:border-red-700");
     playerHandElement.addEventListener("click", (e) => {
       if (isRoleLocked) return;
-
       const cardElement = e.target.closest("[data-id]");
       if (!cardElement) return;
-
       const cardId = cardElement.getAttribute("data-id");
       const playerCardIndex = playerHand.findIndex((c) => c.id === cardId);
       if (playerCardIndex === -1) return;
-
       isRoleLocked = true;
       const playerCard = playerHand.splice(playerCardIndex, 1)[0];
       const computerCard = getComputerChoice(computerHand);
@@ -101,7 +89,6 @@ if (playerBattle) {
       if (computerCardIndex !== -1) {
         computerHand.splice(computerCardIndex, 1);
       }
-
       if (playerSlot && computerSlot) {
         playerSlot.innerHTML = `
           <div class="flex flex-col items-center justify-center">
@@ -116,12 +103,9 @@ if (playerBattle) {
           </div>
         `;
       }
-
       renderPlayerHand(playerHand);
       renderComputerHand(computerHand);
-
       if (feedbackEl) feedbackEl.textContent = "Duel en cours...";
-
       setTimeout(() => {
         if (computerSlot) {
           computerSlot.innerHTML = `
@@ -131,19 +115,15 @@ if (playerBattle) {
             </div>
           `;
         }
-
         const result = duel(playerCard.type, computerCard.type);
         playerScore += result.playerPoints;
         computerScore += result.computerPoints;
-
         if (playerScoreEl) playerScoreEl.textContent = playerScore;
         if (computerScoreEl) computerScoreEl.textContent = computerScore;
         if (feedbackEl) feedbackEl.textContent = result.message;
-
         const isEmpereurVsEsclave =
           (playerCard.type === card.EMPEREUR && computerCard.type === card.ESCLAVE) ||
           (playerCard.type === card.ESCLAVE && computerCard.type === card.EMPEREUR);
-
         if (isEmpereurVsEsclave || playerHand.length === 0) {
           isRoleLocked = true;
           if (btnNextRound) {
@@ -155,24 +135,20 @@ if (playerBattle) {
       }, 1100);
     });
   }
-
   const updateGameHUD = () => {
     if (currentRound) currentRound.textContent = `${roundCount}/12`;
     if (currentSet) currentSet.textContent = `${setCount}/4`;
     if (playerScoreEl) playerScoreEl.textContent = playerScore;
     if (computerScoreEl) computerScoreEl.textContent = computerScore;
   };
-
   updateGameHUD();
-
-  // 📝 تسجيل تفاصيل الماتش فـ التاريخ
   const recordMatchHistory = (status) => {
     const player = playerList.find((p) => p.id === activePlayerId);
     const matchData = {
       id: `m_${Date.now()}`,
-      playerId: activePlayerId, // ✅ تصحيح playerId
+      playerId: activePlayerId,
       playerNickname: player ? player.nickname : "Joueur",
-      playerAvatar: player ? player.avatar : "👤", // ✅ تصحيح avatar
+      playerAvatar: player ? player.avatar : "👤",
       playerScore: playerScore,
       computerScore: computerScore,
       result: status,
@@ -186,20 +162,16 @@ if (playerBattle) {
     };
     saveMatchToHistory(matchData);
   };
-
   const showGameOverModel = (isPlayerWinner) => {
     const gameOverModel = document.getElementById("game-over-modal");
     if (!gameOverModel) return;
-
     const modelIcon = document.getElementById("modal-result-icon");
     const modelTitle = document.getElementById("modal-result-title");
     const modelDesc = document.getElementById("modal-result-desc");
     const modalPlayerScore = document.getElementById("modal-final-player-score");
     const modalComputerScore = document.getElementById("modal-final-computer-score");
-
     if (modalPlayerScore) modalPlayerScore.textContent = playerScore;
     if (modalComputerScore) modalComputerScore.textContent = computerScore;
-
     if (isPlayerWinner) {
       if (modelIcon) modelIcon.textContent = "🏆";
       if (modelTitle) modelTitle.textContent = "Victoire Éclatante !";
@@ -213,11 +185,9 @@ if (playerBattle) {
       if (modelTitle) modelTitle.textContent = "Match Nul !";
       if (modelDesc) modelDesc.textContent = "Égalité parfaite entre les deux camps après 12 manches.";
     }
-
     gameOverModel.classList.remove("hidden");
     gameOverModel.classList.add("flex");
   };
-
   const resetGame = () => {
     playerScore = 0;
     computerScore = 0;
@@ -226,15 +196,12 @@ if (playerBattle) {
     playerRole = card.EMPEREUR;
     computerRole = card.ESCLAVE;
     isRoleLocked = false;
-
     const gameOverModel = document.getElementById("game-over-modal");
     if (gameOverModel) {
       gameOverModel.classList.remove("flex");
       gameOverModel.classList.add("hidden");
     }
-
     if (btnNextRound) btnNextRound.classList.add("hidden");
-
     if (playerSlot && computerSlot) {
       playerSlot.innerHTML = `
         <span class="text-2xl text-amber-500/40">🎴</span>
@@ -245,55 +212,43 @@ if (playerBattle) {
         <span class="text-[10px] text-slate-500 uppercase mt-1">En attente</span>
       `;
     }
-
     if (feedbackEl) feedbackEl.textContent = "À vous de jouer";
-
     updateGameHUD();
     playerHand = generateHand(playerRole);
     computerHand = generateHand(computerRole);
     renderPlayerHand(playerHand);
     renderComputerHand(computerHand);
   };
-
   const btnRestartGame = document.getElementById("btn-restart-game");
   if (btnRestartGame) {
     btnRestartGame.addEventListener("click", () => {
       resetGame();
     });
   }
-
-  // 🏳️ زر الانسحاب مصحح 100%
   const btnAbandon = document.getElementById("btn-abandon");
   if (btnAbandon) {
     btnAbandon.addEventListener("click", () => {
       const confirmAbandon = confirm("Voulez-vous vraiment abandonner la partie ?");
       if (!confirmAbandon) return;
-
       isRoleLocked = true;
-      recordGameResult(false); // كيزيد parties لعبت، وما كيزيدش victoire
-      recordMatchHistory("ABANDON"); // كيسجل الانسحاب فـ السجل
+      recordGameResult(false);
+      recordMatchHistory("ABANDON");
       showGameOverModel(false);
     });
   }
-
-  // زر الجولة الموالية
   if (btnNextRound) {
     btnNextRound.addEventListener("click", () => {
       btnNextRound.classList.add("hidden");
-
       if (roundCount >= 12) {
         isRoleLocked = true;
         const isPlayerWinner = playerScore > computerScore;
         const matchResult = isPlayerWinner ? "VICTOIRE" : playerScore < computerScore ? "DEFAITE" : "EGALITE";
-
         recordGameResult(isPlayerWinner);
         recordMatchHistory(matchResult);
         showGameOverModel(isPlayerWinner);
         return;
       }
-
       isRoleLocked = false;
-
       if (playerSlot && computerSlot) {
         playerSlot.innerHTML = `<span class="text-xs text-slate-500 font-medium">À vous de jouer</span>`;
         computerSlot.innerHTML = `
@@ -301,7 +256,6 @@ if (playerBattle) {
           <span class="text-[10px] text-slate-500 uppercase mt-1">En attente</span>
         `;
       }
-
       if (roundCount === 3 || roundCount === 6 || roundCount === 9) {
         setCount++;
         if (playerRole === card.EMPEREUR) {
@@ -311,7 +265,6 @@ if (playerBattle) {
           playerRole = card.EMPEREUR;
           computerRole = card.ESCLAVE;
         }
-
         if (feedbackEl) {
           feedbackEl.textContent = `Nouveau Groupe (${setCount}/4) ! Rôles inversés : vous êtes ${playerRole}.`;
         }
@@ -320,7 +273,6 @@ if (playerBattle) {
           feedbackEl.textContent = "Choisissez une carte pour débuter le duel.";
         }
       }
-
       roundCount++;
       updateGameHUD();
       playerHand = generateHand(playerRole);
@@ -329,4 +281,18 @@ if (playerBattle) {
       renderComputerHand(computerHand);
     });
   }
+}
+// part 3
+const historyContainer = document.getElementById("history-container");
+if (historyContainer) {
+  let historyData = getStoreHistory();
+  displayHistory(historyData);
+  const btnClearHistory = document.getElementById("btn-clear-history");
+  btnClearHistory.addEventListener("click", () => {
+    if (historyData.length === 0) return;
+    const confirmClear = confirm("Voulez-vous vraiment effacer tout l'historique des parties ?");
+    if (!confirmClear) return;
+    clearStoreHistory();
+    displayHistory(historyData);
+  });
 }

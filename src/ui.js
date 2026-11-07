@@ -96,7 +96,6 @@ export const renderPlayerHand = (cards) => {
       >
         <span class="text-[10px] font-bold text-slate-200 uppercase">${card.name}</span>
         <img src="${card.image}" alt="${card.name}" class="w-20 h-28 object-cover rounded pointer-events-none" />
-
       </div>
     `;
     playerHandElement.innerHTML += cardHTML;
@@ -123,5 +122,68 @@ export const renderComputerHand = (cards) => {
       </div>
     `;
     computerHandElement.innerHTML += cardHTML;
+  });
+};
+// part 3
+export const displayHistory = (historyList) => {
+  const historyContainer = document.getElementById("history-container");
+  if (!historyContainer) return;
+  historyContainer.innerHTML = "";
+  if (!historyList || historyList.length === 0) {
+    historyContainer.innerHTML = `
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/60 p-8 text-center">
+        <span class="text-4xl block mb-2">📜</span>
+        <h3 class="text-sm font-bold text-white mb-1">Aucune partie enregistrée</h3>
+        <p class="text-xs text-slate-500">Lancez un duel depuis la page "Duel (Jeu)" pour commencer à remplir votre historique.</p>
+      </div>
+    `;
+    return;
+  }
+  historyList.forEach((match) => {
+    let badgeColor = "bg-slate-800 text-slate-300 border-slate-700";
+    let badgeIcon = "⚖️";
+    let badgeText = "Match Nul";
+    if (match.result === "VICTOIRE") {
+      badgeColor = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
+      badgeIcon = "🏆";
+      badgeText = "Victoire";
+    } else if (match.result === "DEFAITE") {
+      badgeColor = "bg-rose-500/10 text-rose-400 border-rose-500/30";
+      badgeIcon = "💀";
+      badgeText = "defaite";
+    } else if (match.result === "ABANDON") {
+      badgeColor = "bg-amber-500/10 text-amber-400 border-amber-500/30";
+      badgeIcon = "🏳️";
+      badgeText = "Abondon";
+    }
+    const cardHTML = `
+      <div class="p-4 rounded-xl border border-slate-800 bg-slate-900/70 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition hover:border-slate-700">
+        <div class="flex items-center gap-3">
+          <span class="w-12 h-12 flex items-center justify-center rounded-xl bg-slate-950 border border-slate-700 text-xl">
+            ${match.playerAvatar || "👤"}
+          </span>
+          <div>
+            <div class="flex items-center gap-2 mb-0.5">
+              <span class="font-bold text-sm text-white">${match.playerNickname || "Joueur"}</span>
+              <span class="text-[10px] text-slate-500 font-mono">vs Ordinateur</span>
+            </div>
+            <span class="text-[11px] text-slate-500 block font-mono">📅 ${match.date}</span>
+          </div>
+        </div>
+        <div class="flex items-center justify-between sm:justify-end gap-5">
+          <div class="text-right">
+            <span class="text-[10px] text-slate-500 uppercase block font-semibold">Score Final</span>
+            <span class="font-mono text-base font-black ${match.playerScore > match.computerScore ? "text-amber-400" : "text-slate-300"}">
+              ${match.playerScore} <span class="text-slate-600">:</span> ${match.computerScore}
+            </span>
+          </div>
+          <span class="px-3 py-1 rounded-full border text-xs font-bold flex items-center gap-1.5 ${badgeColor}">
+            <span>${badgeIcon}</span>
+            <span>${badgeText}</span>
+          </span>
+        </div>
+      </div>
+    `;
+    historyContainer.innerHTML += cardHTML;
   });
 };
