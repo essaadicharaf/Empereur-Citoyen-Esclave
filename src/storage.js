@@ -22,3 +22,6 @@ export const saveMatchToHistory = (matchData) => {
   history.unshift(matchData);
   localStorage.setItem("ece_history", JSON.stringify(history));
 };
+export const clearStoreHistory = () => {
+  localStorage.removeItem("ece_history");
+};
