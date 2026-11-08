@@ -25,3 +25,23 @@ export const saveMatchToHistory = (matchData) => {
 export const clearStoreHistory = () => {
   localStorage.removeItem("ece_history");
 };
+export const deleteMatchFromHistory = (matchId) => {
+  const history = getStoreHistory();
+  const updateHistory = history.filter((match) => match.id !== matchId);
+  localStorage.setItem("ece_history", JSON.stringify(updateHistory));
+  return updateHistory;
+};
+export const anonymizePlayerInHistory = (playerId) => {
+  const history = getStoreHistory();
+  const updatedHistory = history.map((match) => {
+    if (match.playerId === playerId) {
+      return {
+        ...match,
+        playerNickname: "Joueur supprimé",
+        playerAvatar: "👤",
+      };
+    }
+    return match;
+  });
+  localStorage.setItem("ece_history", JSON.stringify(updatedHistory));
+};

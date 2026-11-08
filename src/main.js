@@ -9,7 +9,7 @@ import {
   selectPlayer,
   updatePlayer,
 } from "./players.js";
-import { clearStoreHistory, getStoreHistory, saveMatchToHistory } from "./storage.js";
+import { clearStoreHistory, deleteMatchFromHistory, getStoreHistory, saveMatchToHistory } from "./storage.js";
 import {
   checkPlayerActive,
   displayHistory,
@@ -98,8 +98,10 @@ if (playerBattle) {
         `;
         computerSlot.innerHTML = `
           <div class="flex flex-col items-center justify-center">
-            <img src="${computerCard.image}" alt="${computerCard.name}" class="w-16 h-24 sm:w-20 sm:h-28 object-cover rounded-xl shadow-lg border border-slate-600" />
-            <span class="mt-2 text-xs font-bold text-slate-300 uppercase tracking-wider">${computerCard.name}</span>
+            <div class="w-16 h-24 sm:w-20 sm:h-28 rounded-xl border border-slate-700 bg-slate-900 flex flex-col items-center justify-center shadow-lg">
+              <span class="text-2xl text-slate-500">🎴</span>
+              <span class="text-[9px] font-bold text-slate-500 uppercase mt-1">Secret</span>
+            </div>
           </div>
         `;
       }
@@ -132,7 +134,7 @@ if (playerBattle) {
         } else {
           isRoleLocked = false;
         }
-      }, 1100);
+      }, 800);
     });
   }
   const updateGameHUD = () => {
@@ -162,7 +164,7 @@ if (playerBattle) {
     };
     saveMatchToHistory(matchData);
   };
-  const showGameOverModel = (isPlayerWinner) => {
+  const showGameOverModel = (status) => {
     const gameOverModel = document.getElementById("game-over-modal");
     if (!gameOverModel) return;
     const modelIcon = document.getElementById("modal-result-icon");
@@ -170,13 +172,19 @@ if (playerBattle) {
     const modelDesc = document.getElementById("modal-result-desc");
     const modalPlayerScore = document.getElementById("modal-final-player-score");
     const modalComputerScore = document.getElementById("modal-final-computer-score");
+
     if (modalPlayerScore) modalPlayerScore.textContent = playerScore;
     if (modalComputerScore) modalComputerScore.textContent = computerScore;
-    if (isPlayerWinner) {
+
+    if (status === "VICTOIRE") {
       if (modelIcon) modelIcon.textContent = "🏆";
       if (modelTitle) modelTitle.textContent = "Victoire Éclatante !";
       if (modelDesc) modelDesc.textContent = "Vous avez remporté le duel à l'issue des 12 manches.";
-    } else if (playerScore < computerScore) {
+    } else if (status === "ABANDON") {
+      if (modelIcon) modelIcon.textContent = "🏳️";
+      if (modelTitle) modelTitle.textContent = "Partie Abandonnée";
+      if (modelDesc) modelDesc.textContent = "Vous avez déclaré forfait face à l'ordinateur.";
+    } else if (status === "DEFAITE") {
       if (modelIcon) modelIcon.textContent = "💀";
       if (modelTitle) modelTitle.textContent = "Défaite Cuisante";
       if (modelDesc) modelDesc.textContent = "L'ordinateur a remporté le duel. Prenez votre revanche !";
@@ -185,6 +193,7 @@ if (playerBattle) {
       if (modelTitle) modelTitle.textContent = "Match Nul !";
       if (modelDesc) modelDesc.textContent = "Égalité parfaite entre les deux camps après 12 manches.";
     }
+
     gameOverModel.classList.remove("hidden");
     gameOverModel.classList.add("flex");
   };
@@ -233,7 +242,7 @@ if (playerBattle) {
       isRoleLocked = true;
       recordGameResult(false);
       recordMatchHistory("ABANDON");
-      showGameOverModel(false);
+      showGameOverModel("ABANDON");
     });
   }
   if (btnNextRound) {
@@ -245,7 +254,7 @@ if (playerBattle) {
         const matchResult = isPlayerWinner ? "VICTOIRE" : playerScore < computerScore ? "DEFAITE" : "EGALITE";
         recordGameResult(isPlayerWinner);
         recordMatchHistory(matchResult);
-        showGameOverModel(isPlayerWinner);
+        showGameOverModel(matchResult);
         return;
       }
       isRoleLocked = false;
@@ -286,13 +295,62 @@ if (playerBattle) {
 const historyContainer = document.getElementById("history-container");
 if (historyContainer) {
   let historyData = getStoreHistory();
-  displayHistory(historyData);
+  const searchInput = document.getElementById("search-input");
+  const filterResult = document.getElementById("filter-result");
+  const filterPeriod = document.getElementById("filter-period");
   const btnClearHistory = document.getElementById("btn-clear-history");
-  btnClearHistory.addEventListener("click", () => {
-    if (historyData.length === 0) return;
-    const confirmClear = confirm("Voulez-vous vraiment effacer tout l'historique des parties ?");
-    if (!confirmClear) return;
-    clearStoreHistory();
-    displayHistory(historyData);
+  const applyFilters = () => {
+    const query = searchInput ? searchInput.value.trim().toLowerCase() : "";
+    const selectedResult = filterResult ? filterResult.value : "ALL";
+    const selectedPeriod = filterPeriod ? filterPeriod.value : "ALL";
+    const now = new Date();
+    const filtered = historyData.filter((match) => {
+      const matchName = (match.playerNickname || "").toLowerCase();
+      const passQuery = query === "" || matchName.includes(query);
+      let passResult = true;
+      if (selectedResult === "VICTOIRE") {
+        passResult = match.result === "VICTOIRE";
+      } else if (selectedResult === "DEFAITE") {
+        passResult = match.result === "DEFAITE";
+      } else if (selectedResult === "ABANDON") {
+        passResult = match.result === "ABANDON";
+      } else if (selectedResult === "EGALITE") {
+        passResult = match.result === "EGALITE";
+      }
+      let passPeriod = true;
+      const matchTimestamp = Number(match.id.replace("m_", ""));
+      const matchDate = new Date(matchTimestamp);
+      if (selectedPeriod === "TODAY") {
+        passPeriod = matchDate.toDateString() === now.toDateString();
+      } else if (selectedPeriod === "7DAYS") {
+        const diffInDays = (now - matchDate) / (1000 * 60 * 60 * 24);
+        passPeriod = diffInDays <= 7;
+      }
+      return passQuery && passResult && passPeriod;
+    });
+    displayHistory(filtered);
+  };
+  displayHistory(historyData);
+  if (searchInput) searchInput.addEventListener("input", applyFilters);
+  if (filterResult) filterResult.addEventListener("change", applyFilters);
+  if (filterPeriod) filterPeriod.addEventListener("change", applyFilters);
+  historyContainer.addEventListener("click", (e) => {
+    const deleteBtn = e.target.closest('button[data-action="delete-single-match"]');
+    if (!deleteBtn) return;
+    const matchId = deleteBtn.getAttribute("data-id");
+    const confirmDelete = confirm("Voulez-vous supprimer cette partie de l'historique ?");
+    if (!confirmDelete) return;
+    historyData = deleteMatchFromHistory(matchId);
+    applyFilters();
   });
+  if (btnClearHistory) {
+    btnClearHistory.addEventListener("click", () => {
+      if (historyData.length === 0) return;
+      const confirmClear = confirm("Voulez-vous vraiment effacer tout l'historique des parties ?");
+      if (!confirmClear) return;
+      clearStoreHistory();
+      historyData = [];
+      applyFilters();
+    });
+  }
 }

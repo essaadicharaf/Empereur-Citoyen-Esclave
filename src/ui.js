@@ -49,7 +49,7 @@ export const displayPlayers = (playerList, activePlayerId) => {
           <button type="button" data-action="select" data-id="${player.id}" class="px-3.5 py-2 rounded-lg text-xs font-bold transition ${isSelected ? "bg-amber-500 text-slate-950" : "bg-slate-800 text-slate-300 hover:text-white hover:border-2 hover:bg-slate-950 "}">
             ${isSelected ? "Actif" : "Choisir"}
           </button>
-          <button type="button" data-action="delete" data-id="${player.id}" class=" px-3 py-2 rounded-lg text-xs font-bold transition bg-slate-800   text-slate-400 hover:text-red-700 hover:border-2 hover:border-red-700 hover:bg-red-300 title="Supprimer">
+          <button type="button" data-action="delete" data-id="${player.id}" class=" px-3 py-2 rounded-lg text-xs font-bold transition bg-slate-800   text-slate-400 hover:text-red-700 hover:border-2 hover:border-red-700 hover:bg-red-300" title="Supprimer">
           🗑️ Supprimer
           </button>
           <button type="button" data-action="edit" data-id="${player.id}" class="px-3 py-2 rounded-lg text-xs font-bold transition bg-slate-800   text-slate-400 hover:text-orange-600 hover:border-2 hover:border-orange-600 hover:bg-orange-100" title="Modifier">
@@ -131,15 +131,16 @@ export const displayHistory = (historyList) => {
   historyContainer.innerHTML = "";
   if (!historyList || historyList.length === 0) {
     historyContainer.innerHTML = `
-      <div class="rounded-2xl border border-slate-800 bg-slate-900/60 p-8 text-center">
-        <span class="text-4xl block mb-2">📜</span>
-        <h3 class="text-sm font-bold text-white mb-1">Aucune partie enregistrée</h3>
-        <p class="text-xs text-slate-500">Lancez un duel depuis la page "Duel (Jeu)" pour commencer à remplir votre historique.</p>
+      <div class="py-12 flex flex-col items-center justify-center text-center">
+        <span class="text-5xl mb-3">📬</span>
+        <h3 class="text-base font-bold text-white mb-1">Aucune partie trouvée.</h3>
+        <p class="text-xs text-slate-400">Jouez votre première partie !</p>
       </div>
     `;
     return;
   }
   historyList.forEach((match) => {
+    const isDeletedPlayer = match.playerNickname === "Joueur supprimé";
     let badgeColor = "bg-slate-800 text-slate-300 border-slate-700";
     let badgeIcon = "⚖️";
     let badgeText = "Match Nul";
@@ -150,11 +151,11 @@ export const displayHistory = (historyList) => {
     } else if (match.result === "DEFAITE") {
       badgeColor = "bg-rose-500/10 text-rose-400 border-rose-500/30";
       badgeIcon = "💀";
-      badgeText = "defaite";
+      badgeText = "Défaite";
     } else if (match.result === "ABANDON") {
       badgeColor = "bg-amber-500/10 text-amber-400 border-amber-500/30";
       badgeIcon = "🏳️";
-      badgeText = "Abondon";
+      badgeText = "Abandon";
     }
     const cardHTML = `
       <div class="p-4 rounded-xl border border-slate-800 bg-slate-900/70 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition hover:border-slate-700">
@@ -164,13 +165,15 @@ export const displayHistory = (historyList) => {
           </span>
           <div>
             <div class="flex items-center gap-2 mb-0.5">
-              <span class="font-bold text-sm text-white">${match.playerNickname || "Joueur"}</span>
+              <span class="font-bold text-sm ${isDeletedPlayer ? "text-slate-400 italic" : "text-white"}">
+  ${match.playerNickname || "Joueur"}
+</span>
               <span class="text-[10px] text-slate-500 font-mono">vs Ordinateur</span>
             </div>
             <span class="text-[11px] text-slate-500 block font-mono">📅 ${match.date}</span>
           </div>
         </div>
-        <div class="flex items-center justify-between sm:justify-end gap-5">
+        <div class="flex items-center justify-between sm:justify-end gap-3 sm:gap-4">
           <div class="text-right">
             <span class="text-[10px] text-slate-500 uppercase block font-semibold">Score Final</span>
             <span class="font-mono text-base font-black ${match.playerScore > match.computerScore ? "text-amber-400" : "text-slate-300"}">
@@ -181,6 +184,15 @@ export const displayHistory = (historyList) => {
             <span>${badgeIcon}</span>
             <span>${badgeText}</span>
           </span>
+          <button
+            type="button"
+            data-action="delete-single-match"
+            data-id="${match.id}"
+            class="p-2 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition cursor-pointer"
+            title="Supprimer cette partie"
+          >
+            🗑️
+          </button>
         </div>
       </div>
     `;
