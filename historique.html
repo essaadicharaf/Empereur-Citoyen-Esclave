@@ -63,10 +63,7 @@
     <main class="max-w-5xl mx-auto px-4 py-8 flex-1 w-full">
       <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 class="text-2xl font-black text-white">Historique des Duels</h2>
-          <p class="text-xs sm:text-sm text-slate-400">
-            Consultez l'historique et les scores de toutes vos parties jouées.
-          </p>
+          <h2 class="text-2xl font-black text-white flex items-center gap-2"><span>📜</span> Historique des parties</h2>
         </div>
         <button
           type="button"
@@ -76,6 +73,43 @@
           🗑️ Vider l'historique
         </button>
       </div>
+      <div class="mb-6 p-4 rounded-2xl border border-slate-800 bg-slate-900/60 grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div>
+          <label for="search-input" class="block text-xs font-semibold text-slate-400 mb-1.5">
+            Rechercher par pseudo
+          </label>
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Pseudo..."
+            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition"
+          />
+        </div>
+        <div>
+          <label for="filter-result" class="block text-xs font-semibold text-slate-400 mb-1.5"> Résultat </label>
+          <select
+            id="filter-result"
+            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-slate-300 focus:outline-none focus:border-indigo-500 transition cursor-pointer"
+          >
+            <option value="ALL">Tous</option>
+            <option value="VICTOIRE">Victoires</option>
+            <option value="DEFAITE">Défaites</option>
+            <option value="ABANDON">Abandons</option>
+            <option value="EGALITE">Égalités</option>
+          </select>
+        </div>
+        <div>
+          <label for="filter-period" class="block text-xs font-semibold text-slate-400 mb-1.5"> Période </label>
+          <select
+            id="filter-period"
+            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-slate-300 focus:outline-none focus:border-indigo-500 transition cursor-pointer"
+          >
+            <option value="ALL">Tout</option>
+            <option value="TODAY">Aujourd'hui</option>
+            <option value="7DAYS">7 derniers jours</option>
+          </select>
+        </div>
+      </div>
       <section id="history-container" class="space-y-3"></section>
     </main>
     <footer class="p-4 border-t border-slate-800 text-center text-xs text-white bg-sky-950/80 uppercase">
@@ -84,3 +118,6 @@
     <script type="module" src="src/main.js" defer></script>
   </body>
 </html>
+
+
+

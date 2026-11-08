@@ -1,11 +1,17 @@
-import { getStoredActivePlayer, getStoredPlayers, saveActivePlayerId, saveToLocaleStorage } from "./storage.js";
+import {
+  anonymizePlayerInHistory,
+  getStoredActivePlayer,
+  getStoredPlayers,
+  saveActivePlayerId,
+  saveToLocaleStorage,
+} from "./storage.js";
 import { displayPlayers } from "./ui.js";
 export const playerForm = document.getElementById("player-form");
 export const main = document.querySelector("main");
 export const inputName = document.getElementById("nickname-input");
 export const nicknameError = document.getElementById("nickname-error");
 export const btnSubmit = document.querySelector('button[type="submit"]');
-export const nicknameRegex = /^[A-Za-z0-9]{3,15}$/;
+export const nicknameRegex = /^[A-Za-z0-9_]{3,15}$/;
 export let playerList = getStoredPlayers();
 export let activePlayerId = getStoredActivePlayer();
 export let editingPlayerId = null;
@@ -33,6 +39,7 @@ export const deletePlayer = (id) => {
     activePlayerId = null;
     saveActivePlayerId(null);
   }
+  anonymizePlayerInHistory(id);
   displayPlayers(playerList, activePlayerId);
 };
 export let formValidation = () => {
@@ -93,5 +100,8 @@ export const recordGameResult = (isWinner) => {
   }
   saveToLocaleStorage(playerList);
 };
+
+
+
 
 
