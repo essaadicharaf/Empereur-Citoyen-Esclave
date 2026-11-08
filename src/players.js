@@ -100,8 +100,3 @@ export const recordGameResult = (isWinner) => {
   }
   saveToLocaleStorage(playerList);
 };
-
-
-
-
-

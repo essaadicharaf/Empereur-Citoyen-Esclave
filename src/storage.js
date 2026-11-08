@@ -41,7 +41,7 @@ export const anonymizePlayerInHistory = (playerId) => {
         playerAvatar: "👤",
       };
     }
-    return match; // ✅ ضرورية باش تحافظ على باقي الماتشات
+    return match;
   });
   localStorage.setItem("ece_history", JSON.stringify(updatedHistory));
 };
