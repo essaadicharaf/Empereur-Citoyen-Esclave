@@ -92,3 +92,48 @@ Empereur-Citoyen-Esclave/
 ├── package.json           # Dépendances Tailwind CSS
 └── README.md              # Documentation du projet
 ```
+
+🛠️ Technologies Utilisées
+HTML5 Sémantique
+
+Tailwind CSS v4 (Framework utilitaire moderne)
+
+JavaScript ES6+ (Modules, LocalStorage, Arrow Functions, Template Literals)
+
+Git & GitHub (Gestion de version, Gitflow et GitHub Pages)
+
+🚀 Installation et Lancement Local
+Cloner le dépôt :
+Bash
+
+```
+git clone [https://github.com/essaadicharaf/Empereur-Citoyen-Esclave.git](https://github.com/essaadicharaf/Empereur-Citoyen-Esclave.git)
+cd Empereur-Citoyen-Esclave
+```
+
+Installer les dépendances :
+
+Bash
+
+```
+npm install
+```
+
+Compiler les styles Tailwind :
+
+Bash
+
+# Compilation ponctuelle minifiée
+
+```
+npm run build
+```
+
+# Ou mode écoute (Watch) pour le développement
+
+```
+npm run watch
+```
+
+Lancer le projet :
+Ouvrez `index.html` avec l'extension Live Server de VS Code ou directement dans votre navigateur.
